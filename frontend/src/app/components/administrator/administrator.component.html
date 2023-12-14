@@ -1,0 +1,257 @@
+
+<div class="container">
+
+    <div class="card" style="">
+        <div class="card-header">
+          Clientes
+        </div>
+        <div class="card-body">
+
+            <div class="table-responisve">
+              <div class="container-fluid" [@estadoFiltro] = "stateFiltro">
+                <form>
+                  <div class="d-flex">
+                    <input type="text" class="form-control me-2 " placeholder="id empleado"
+                    #fIdCustomers (keyup)="onFiltroChange({
+                      idCustomers: fIdCustomers.value,
+                      name: fName.value,
+                      lastName1: fLastName1.value,
+                      lastName2: fLastName2.value,
+                    })">
+    
+                    <input type="text" class="form-control me-2" placeholder="nombre"
+                    #fName (keyup)="onFiltroChange({
+                      idCustomers: fIdCustomers.value,
+                      name: fName.value,
+                      lastName1: fLastName1.value,
+                      lastName2: fLastName2.value,
+                    })">
+                    <input type="text" class="form-control me-2" placeholder="apellido 1"
+                    #fLastName1 (keyup)="onFiltroChange({
+                      idCustomers: fIdCustomers.value,
+                      name: fName.value,
+                      lastName1: fLastName1.value,
+                      lastName2: fLastName2.value,
+                    })">
+                    <input type="text" class="form-control me-2" placeholder="apellido 2"
+                    #fLastName2 (keyup)="onFiltroChange({
+                      idCustomers: fIdCustomers.value,
+                      name: fName.value,
+                      lastName1: fLastName1.value,
+                      lastName2: fLastName2.value,
+                    })">
+                    <button class="btn btn-danger" (click)="onFiltrar();"> &times; </button>
+                  </div>
+                </form>
+              </div>
+                <table class="table table-hover ">
+                <thead >
+                  <tr >
+                    <th scope="col">id</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">email</th>
+                    <th scope="col">celular</th>
+                    <th scope="col">especialidad</th>
+                    <th scope="col" colspan="3" class="text-center">
+                      <button class="btn btn-success btn-sm"(click)="OnNuevo();" 
+                      data-bs-toggle="modal" data-bs-target="#creaCliente">
+                          <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                      </button>
+                  </th>
+
+                  </tr >
+                </thead>
+                <tbody class="table-group-divider">
+                  <tr *ngFor="let item of employee | paginate: {
+                    itemsPerPage: itemsPPag,
+                    currentPage: pagActual,
+                    totalItems: numReg }">
+
+
+                    <th scope="row">{{item.idEmployee}}</th>
+                    <td>{{item.name}} {{item.lastname1}} {{item.lastname2}}</td>
+                    <td>{{item.email}}</td>
+                    <td>{{item.cellphone}}</td>
+                    <td>{{item.specialty}}</td>
+
+                    <td class="text-center"><button class="btn btn-danger btn-sm" (click)="OnEliminar(item.idEmployee);">
+                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                    </button></td>
+
+                    <td class="text-center"><button class="btn btn-info btn-sm" (click)="OnInfo(item.idEmployee);">
+                        <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
+                    </button></td>
+
+                    <td class="text-center"><button class="btn btn-primary btn-sm" (click)="OnResetear(item.idEmployee, item.name+' '+item.lastname1+' '+item.lastname2)">
+                      <fa-icon [icon]="['fas', 'key']"></fa-icon>
+                  </button></td>
+
+                  </tr>
+                  
+                </tbody>
+            
+                </table>
+            </div>
+          </div>
+
+          <div class="card-footer d-flex justify-content-between pt-4">
+
+         <div class="d-flex">
+                
+            <div class="me-2">
+                <select class="form-select form-select-sm" (change)="onCambioTama($event);">
+                    <option *ngFor="let tama of paginas" [ngValue]="tama" [selected] ="tama === itemsPPag">{{tama}}</option>
+                </select>
+            </div>
+
+            <pagination-controls (pageChange)="onCambioPag($event)" previousLabel="" nextLabel="">
+            </pagination-controls>
+
+        </div>
+            <div class="botones">
+
+                <button class="btn btn-warning btn-sm me-2"(click)="onFiltrar();"><fa-icon [icon]="['fas', 'magnifying-glass']"></fa-icon> Filtrar</button>
+                <button class="btn btn-info btn-sm me-2"(click)="onImprimir();"><fa-icon [icon]="['fas', 'print']"></fa-icon> Imprimir</button>
+                <button class="btn btn-danger btn-sm"><fa-icon [icon]="['fas', 'circle-xmark']"></fa-icon> Cerrar</button>
+
+            </div>
+        </div>
+
+        </div>
+</div>
+
+
+<!-- FORMULARIO CLIENTE MODAL-->
+
+<!-- Button trigger modal -->
+
+<!-- Modal -->
+<div id="creaCliente" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="creaCliente">{{titulo}}</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        
+       <!--formulario--> 
+
+       <form id = "frmCliente" [formGroup]="frmCliente" (ngSubmit)="onSubmit();">
+
+        <div class="row mb-2">
+      
+          <input type="hidden" formControlName="idAdmin"> 
+
+          <div class="row mb-2">
+            <label for="idUser" class="col-sm-3 col-form-label">Usuario</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" id="idUser" formControlName="idUser">
+              <div class="alert alert-danger" *ngIf="F['idUser'].invalid && F['idUser'].touched">
+                <div *ngIf="F['idUser'].errors!['required']">Este campo es obligatorio</div>
+                <div *ngIf="F['idUser'].errors!['minlength']">Debe ser de al menos 5 dígitos.</div>
+                <div *ngIf="F['idUser'].errors!['maxlength']">Debe ser de maximo 15 dígitos.</div>
+              </div>
+            
+            </div>
+          </div>
+
+          <div class="row mb-2">
+            <label for="passw" class="col-sm-3 col-form-label">Contraseña</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" id="passw" formControlName="passw">
+              <div class="alert alert-danger" *ngIf="F['passw'].invalid && F['passw'].touched">
+                <div *ngIf="F['passw'].errors!['required']">Este campo es obligatorio</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mb-2">
+            <label for="name" class="col-sm-3 col-form-label">Nombre</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" id="name" formControlName="name">
+              <div class="alert alert-danger" *ngIf="F['name'].invalid && F['name'].touched">
+                <div *ngIf="F['name'].errors!['required']">Este campo es obligatorio</div>
+                <div *ngIf="F['name'].errors!['minlength']">Debe contener al menos 3 letras.</div>
+                <div *ngIf="F['name'].errors!['maxlength']">Debe contener maximo 30 letras.</div>
+                <div *ngIf="F['name'].errors!['pattern']">Caracter no válido en el nombre.</div>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="row mb-2">
+            <label for="lastName1" class="col-sm-3 col-form-label">Apellido 1</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" id="lastName1" formControlName="lastName1">
+              <div class="alert alert-danger" *ngIf="F['lastName1'].invalid && F['lastName1'].touched">
+                <div *ngIf="F['lastName1'].errors!['required']">Este campo es obligatorio</div>
+                <div *ngIf="F['lastName1'].errors!['minlength']">Debe contener al menos 2 letras.</div>
+                <div *ngIf="F['lastName1'].errors!['maxlength']">Debe contener maximo 15 letras.</div>
+                <div *ngIf="F['lastName1'].errors!['pattern']">Caracter no válido en el apellido.</div>
+              </div>
+            
+            </div>
+          </div>
+
+          <div class="row mb-2">
+            <label for="lastName2" class="col-sm-3 col-form-label">Apellido 2</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" id="lastName2" formControlName="lastName2">
+              <div class="alert alert-danger" *ngIf="F['lastName2'].invalid && F['lastName2'].touched">
+                <div *ngIf="F['lastName2'].errors!['required']">Este campo es obligatorio</div>
+                <div *ngIf="F['lastName2'].errors!['minlength']">Debe contener al menos 2 letras.</div>
+                <div *ngIf="F['lastName2'].errors!['maxlength']">Debe contener maximo 15 letras.</div>
+                <div *ngIf="F['lastName2'].errors!['pattern']">Caracter no válido en el apellido.</div>
+              </div>
+            
+            </div>
+          </div>
+
+          <div class="row mb-2">
+            <label for="email" class="col-sm-3 col-form-label">Email</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" id="email" formControlName="email">
+              <div class="alert alert-danger" *ngIf="F['email'].invalid && F['email'].touched">
+                <div *ngIf="F['email'].errors!['required']">Este campo es obligatorio</div>
+                <div *ngIf="F['email'].errors!['email']">Formato de correo inválido.</div>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="row mb-2">
+            <label for="cellphone" class="col-sm-3 col-form-label">Celular</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" id="cellphone" formControlName="cellphone">
+              <div class="alert alert-danger" *ngIf="F['cellphone'].invalid && F['cellphone'].touched">
+                <div *ngIf="F['cellphone'].errors!['required']">Este campo es obligatorio y solo acepta números.</div>
+              </div>
+            
+            </div>
+          </div>
+
+          <div class="row mb-2">
+            <label for="specialty" class="col-sm-3 col-form-label">Especialidad</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" id="specialty" formControlName="specialty">
+              <div class="alert alert-danger" *ngIf="F['specialty'].invalid && F['specialty'].touched">
+                <div *ngIf="F['specialty'].errors!['required']">La especialidad del barbero es necesaria.</div>
+              </div>
+            </div>
+          </div>
+
+  </div>
+
+</form>
+       <!---->
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" form="frmCliente" data-bs-dismiss="modal" aria-label="Close" [disabled]="frmCliente.invalid">Guardar</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="onCerrar();">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>

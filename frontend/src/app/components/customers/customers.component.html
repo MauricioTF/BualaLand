@@ -1,0 +1,187 @@
+<div class="container">
+
+    <div class="card" style="">
+        <div class="card-header">
+          Clientes
+        </div>
+        <div class="card-body">
+
+            <div class="table-responisve">
+
+              <div class="container-fluid" [@estadoFiltro] = "stateFiltro">
+                <form>
+                  <div class="d-flex">
+                    <input type="text" class="form-control me-2 " placeholder="id cita"
+                    #fIdDate (keyup)="onFiltroChange({
+                      idDate: fIdDate.value,
+                      dateCut: fDateCut.value,
+                      timeCut: fTimeCut.value,
+                    })">
+
+                    <input type="text" class="form-control me-2" placeholder="fecha"
+                    #fDateCut (keyup)="onFiltroChange({
+                      idDate: fIdDate.value,
+                      dateCut: fDateCut.value,
+                      timeCut: fTimeCut.value
+                    })">
+                    <input type="text" class="form-control me-2" placeholder="hora"
+                    #fTimeCut (keyup)="onFiltroChange({
+                      idDate: fIdDate.value,
+                      dateCut: fDateCut.value,
+                      timeCut: fTimeCut.value,
+                    })">
+                    <button class="btn btn-danger" (click)="onFiltrar();"> &times; </button>
+                  </div>
+                </form>
+              </div>
+                <table class="table table-hover ">
+                <thead >
+                  <tr >
+                    <th scope="col">id</th>
+                    <th scope="col">fecha y hora</th>
+                    <th scope="col">estado</th>
+                    <th scope="col">precio</th>
+                    <th scope="col" colspan="3" class="text-center">
+                        <button class="btn btn-success btn-sm"(click)="OnNuevo();"
+                        data-bs-toggle="modal" data-bs-target="#ventanaCliente">
+                            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+                        </button>
+                    </th>
+
+                  </tr >
+                </thead>
+                <tbody class="table-group-divider">
+                  <tr *ngFor="let item of dateCuts | paginate: {
+                    itemsPerPage: itemsPPag,
+                    currentPage: pagActual,
+                    totalItems: numReg }">
+                    
+                    <th scope="row">{{item.idDate}}</th>
+                    <td>{{item.dateCut}} {{item.timeCut}}</td>
+                    <td *ngIf="item.stateDate == 0">
+                      Pendiente
+                    </td>
+                    <td *ngIf="item.stateDate == 1">
+                      Completado
+                    </td>                     
+                    <td>{{item.amount}}</td>
+
+                    <td class="text-center">
+                      <button class="btn btn-warning btn-sm" (click)="OnEditar(item.idDate);"
+                      data-bs-toggle="modal" data-bs-target="#ventanaCliente">
+                        <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
+                    </button></td>
+
+                    <td class="text-center"><button class="btn btn-danger btn-sm" (click)="OnEliminar(item.idDate);">
+                        <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                    </button></td>
+
+                    <td class="text-center"><button class="btn btn-info btn-sm" (click)="OnInfo(item.idDate);">
+                        <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
+                    </button></td>
+                  </tr>
+                  
+                </tbody>
+            
+                </table>
+
+                <div class="alert alert-primary text-center" *ngIf="dateCuts.length === 0"
+                >No se encontró un resultado</div>
+
+            </div>
+            
+          </div>
+
+        <div class="card-footer d-flex justify-content-between pt-4">
+
+          <div class="d-flex">
+                
+            <div class="me-2">
+                <select class="form-select form-select-sm" (change)="onCambioTama($event);">
+                    <option *ngFor="let tama of paginas" [ngValue]="tama" [selected] ="tama === itemsPPag">{{tama}}</option>
+                </select>
+            </div>
+
+            <pagination-controls (pageChange)="onCambioPag($event)" previousLabel="" nextLabel="">
+            </pagination-controls>
+
+        </div>
+
+            <div class="botones">
+
+              <button class="btn btn-warning btn-sm me-2" (click)="onFiltrar();"><fa-icon [icon]="['fas', 'magnifying-glass']"></fa-icon> Filtrar</button>
+              <button class="btn btn-info btn-sm me-2"(click)="onImprimir();"><fa-icon [icon]="['fas', 'print']"></fa-icon> Imprimir</button>
+                <button class="btn btn-danger btn-sm"><fa-icon [icon]="['fas', 'circle-xmark']"></fa-icon> Cerrar</button>
+
+            </div>
+        </div>
+        
+      </div>
+</div>
+
+
+
+<!-- FORMULARIO CLIENTE MODAL-->
+
+<!-- Button trigger modal -->
+
+<!-- Modal -->
+<div class="modal fade" id="ventanaCliente" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel">
+  <div class="modal-dialog">
+    <div class="modal-content">"
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="ventanaCliente">{{titulo}}</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        
+       <!--formulario--> 
+
+          <!--formulario-->
+
+          <form id="frmCliente" [formGroup]="frmCliente" (ngSubmit)="onSubmit();">
+
+            <div class="row mb-2">
+  
+              <input type="hidden" formControlName="idDate">
+              <input type="hidden" formControlName="idCustomers">
+              <input type="hidden" formControlName="idEmployee">
+              <input type="hidden" formControlName="stateDate">
+              <input type="hidden" formControlName="cutFree">
+              <input type="hidden" formControlName="amount">
+  
+              <div class="row mb-2">
+                <label for="dateCut" class="col-sm-3 col-form-label">fecha cita</label>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control" id="dateCut" placeholder="Ingrese la fecha YYYY-MM-DD" formControlName="dateCut">
+                  <div class="alert alert-danger" *ngIf="F['dateCut'].invalid && F['dateCut'].touched">
+                    <div *ngIf="F['dateCut'].errors!['required']">Este campo es obligatorio, ingresar la fecha de manera correcta.</div>
+                  </div>
+                </div>
+              </div>
+  
+              <div class="row mb-2">
+                <label for="timeCut" class="col-sm-3 col-form-label">hora cita</label>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control" id="timeCut" placeholder="Ingrese la hora de su cita" formControlName="timeCut">
+                  <div class="alert alert-danger" *ngIf="F['timeCut'].invalid && F['timeCut'].touched">
+                    <div *ngIf="F['timeCut'].errors!['required']">Este campo es obligatorio..</div>
+                  </div>
+                </div>
+              </div>
+  
+            </div>
+  
+          </form>
+          <!---->
+       <!---->
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" form="frmCliente" data-bs-dismiss="modal" aria-label="Close" [disabled]="frmCliente.invalid">Guardar</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>

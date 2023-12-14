@@ -1,0 +1,14 @@
+/* You can add global styles to this file, and also import other style files */
+@font-face{
+    font-family: 'Areta Bridge';
+    src: url('assets/font/Aretha Bridge.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face{
+    font-family: 'YsabeauOffice-VariableFont_wght';
+    src: url('assets/font/YsabeauOffice-VariableFont_wght.ttf');
+    font-weight: normal;
+    font-style: normal;
+}

@@ -1,0 +1,65 @@
+<div class="container-sm mt-3" style="width:25rem">
+
+    <div class="card">
+
+        <div class="card-header">
+            <h3 class="text-center">Cambiar contraseña</h3>
+        </div>
+
+        <div class="card-body">
+            <form [formGroup]="frmChangePassw" id="frmLogin" (submit)="onSubmit();">
+
+                <div class="form-floating mb-3">
+                    <input type="text" id="passw" class="form-control" placeholder="Contraseña actual" formControlName="passw"><label for="passw">Contraseña actual</label>
+                    <div class="alert alert-danger" *ngIf="F['passw'].invalid && F['passw'].touched">
+                        <div *ngIf="F['passw'].errors!['required']">
+                          El campo es obligatorio
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input type="password" id="passwN" class="form-control" placeholder="contraseña" formControlName="passwN"><label for="passwN">Nueva contraseña</label>
+                
+                    <div class="alert alert-danger" *ngIf="F['passwN'].invalid && F['passwN'].touched">
+                        <div *ngIf="F['passwN'].errors!['required']">
+                          El campo es obligatorio
+                        </div>
+                        <div *ngIf="F['passwN'].errors!['passwordStrength']">
+                          Debe contener May, Min, Num y caracteres especiales
+                        </div>
+                        <div *ngIf="F['passwN'].errors!['minlength']">
+                            Debe contener al menos 8 caracteres
+                          </div>
+                    </div>
+                
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input type="password" id="passwR" class="form-control" placeholder="contraseña" formControlName="passwR"><label for="passwR">Confirmar contraseña</label>
+                
+                    <div class="alert alert-danger" *ngIf="F['passwR'].invalid && F['passwR'].touched">
+                        <div *ngIf="F['passwR'].errors!['required']">
+                          El campo es obligatorio
+                        </div>
+                        <div *ngIf="F['passwR'].errors!['notEquals']">
+                          Las contraseñas deben ser iguales
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- -->
+                <div class="alert alert-danger" *ngIf="errorLogin">Usuario o contraseña no válida</div>
+            </form>
+        </div>
+
+        <div class="card-footer">
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary w-25 me-2" form="frmLogin" [disabled]="frmChangePassw.invalid">Cambiar</button>
+                <button type="button" class="btn btn-danger w-25" form="frmLogin" (click)="onCerrar()">Cerrar</button>
+
+            </div>
+        </div>
+    </div>
+</div>

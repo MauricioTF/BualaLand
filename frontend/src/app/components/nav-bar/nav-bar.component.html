@@ -1,0 +1,50 @@
+<style>
+
+  .nav{
+    background: rgb(89,125,247);
+    background: linear-gradient(90deg, rgba(89,125,247,1) 0%, rgba(255,17,17,0.8015581232492998) 50%, rgba(255,255,255,1) 100%);
+      
+  }
+</style>
+<nav class="nav navbar navbar-expand-lg bg-body-tertiary" >
+  <div class="container-fluid">
+    <a class="navbar-brand" *ngIf ="rol == -1" href="/home">Bualaland</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarNavDropdown">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page"*ngIf ="rol == -1" [routerLink]="['/login']">Iniciar Sesion</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" *ngIf ="rol == 1" [routerLink]="['/administrator']">Empleados</a>
+
+          <a class="nav-link active" *ngIf ="rol == 2" [routerLink]="['/employee']">Citas</a>
+
+          <a class="nav-link active" *ngIf ="rol == 3" [routerLink]="['/customer']">Citas anteriores</a>
+
+        </li>
+        <li class="nav-item">
+
+          <a class="nav-link active" *ngIf ="rol == 2" [routerLink]="['/employeecustomer']">Clientes</a>
+
+        </li>
+      </ul>
+
+      <!-- para colocar datos de sesion-->
+      <div class="btn-group dropstart" *ngIf="usuario">
+        <button button="" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+          <fa-icon [icon]="['fas', 'user']"></fa-icon> {{usuario}}
+          <ul class="dropdown-menu">
+            <li><a href="#" class="dropdown-item" (click)="onSalir();">Salir</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" [routerLink]="['/changePassw']">Contraseña</a></li>
+          </ul>
+        </button>
+      </div>
+
+      <!-- FIN datos de sesion-->
+    </div>
+  </div>
+</nav>

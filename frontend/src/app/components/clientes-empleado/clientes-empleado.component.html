@@ -1,0 +1,119 @@
+
+<div class="container">
+
+    <div class="card">
+      <div class="card-header">
+        Clientes
+      </div>
+      <div class="card-body">
+  
+        <div class="table-responisve">
+          <div class="container-fluid" [@estadoFiltro] = "stateFiltro">
+            <form>
+              <div class="d-flex">
+                <input type="text" class="form-control me-2 " placeholder="id cliente"
+                #fIdCustomers (keyup)="onFiltroChange({
+                  idCustomers: fIdCustomers.value,
+                  name: fName.value,
+                  lastName1: fLastName1.value,
+                  lastName2: fLastName2.value,
+                })">
+
+                <input type="text" class="form-control me-2" placeholder="nombre"
+                #fName (keyup)="onFiltroChange({
+                  idCustomers: fIdCustomers.value,
+                  name: fName.value,
+                  lastName1: fLastName1.value,
+                  lastName2: fLastName2.value,
+                })">
+                <input type="text" class="form-control me-2" placeholder="apellido 1"
+                #fLastName1 (keyup)="onFiltroChange({
+                  idCustomers: fIdCustomers.value,
+                  name: fName.value,
+                  lastName1: fLastName1.value,
+                  lastName2: fLastName2.value,
+                })">
+                <input type="text" class="form-control me-2" placeholder="apellido 2"
+                #fLastName2 (keyup)="onFiltroChange({
+                  idCustomers: fIdCustomers.value,
+                  name: fName.value,
+                  lastName1: fLastName1.value,
+                  lastName2: fLastName2.value,
+                })">
+                <button class="btn btn-danger" (click)="onFiltrar();"> &times; </button>
+              </div>
+            </form>
+          </div>
+          <table class="table table-hover ">
+            <thead>
+              <tr>
+                <th scope="col">id</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Correo</th>
+                <th scope="col">Numero de Telefono</th>
+                <th scope="col" colspan="3" class="text-center">
+                </th>
+  
+              </tr>
+            </thead>
+            <tbody class="table-group-divider">
+              <tr *ngFor="let item of employee| paginate: {
+                itemsPerPage: itemsPPag,
+                currentPage: pagActual,
+                totalItems: numReg }">
+
+                <th scope="row">{{item.idCustomers}}</th>
+                <td>{{item.name}} {{item.lastName1}} {{item.lastName2}}</td>
+                <td>{{item.email}}</td>
+                <td>{{item.cellphone}}</td>
+  
+                <td class="text-center"><button class="btn btn-info btn-sm" (click)="OnInfo(item.idCustomers);">
+                  <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
+              </button></td>
+  
+                <td class="text-center"><button class="btn btn-danger btn-sm" (click)="onEliminar(item.idCustomers);">
+                  <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                  </button></td>
+              </tr>
+  
+            </tbody>
+  
+          </table>
+        </div>
+      </div>
+  
+      <div class="card-footer d-flex justify-content-between pt-4">
+  
+        <div class="d-flex">
+                
+          <div class="me-2">
+              <select class="form-select form-select-sm" (change)="onCambioTama($event);">
+                  <option *ngFor="let tama of paginas" [ngValue]="tama" [selected] ="tama === itemsPPag">{{tama}}</option>
+              </select>
+          </div>
+
+          <pagination-controls
+                (pageChange)="onCambioPag($event)"
+                previousLabel=""
+                nextLabel="">
+        </pagination-controls>
+
+      </div>
+        <div class="botones">
+  
+          <button class="btn btn-warning btn-sm me-2"(click)="onFiltrar();"><fa-icon [icon]="['fas', 'magnifying-glass']"></fa-icon>
+            Filtrar</button>
+          <button class="btn btn-info btn-sm me-2"(click)="onImprimir();"><fa-icon [icon]="['fas', 'print']"></fa-icon> Imprimir</button>
+          <button class="btn btn-danger btn-sm"><fa-icon [icon]="['fas', 'circle-xmark']"></fa-icon> Cerrar</button>
+  
+        </div>
+      </div>
+    </div>
+  
+  
+  </div>
+  <div class="text-center">
+    <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#MuestraClientes">
+      <fa-icon [icon]="['fas', 'users']"> Clientes </fa-icon>
+    </button>
+  </div>
